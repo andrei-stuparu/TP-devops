@@ -1,8 +1,11 @@
-# Container image that runs your code
-FROM alpine:3.10
+FROM openjdk
+COPY tp-docker-1.0.0.jar /app/
+EXPOSE 8080
+ENV dburl 127.0.0.1:5432/tp_devops
+ENV dbname tp_devops
+ENV dbpwd tp_devops
 
-# Copies your code file from your action repository to the filesystem path `/` of the container
-COPY entrypoint.sh /entrypoint.sh
-
-# Code file to execute when the docker container starts up (`entrypoint.sh`)
-ENTRYPOINT ["/entrypoint.sh"]
+ENV POSTGRES_USER = tp_devops
+ENV POSTGRES_PASSWORD = tp_devops
+ENV POSTGRES_DB = tp_devops
+ENTRYPOINT java -Ddatabase.url=$dburl -Ddatabase.username=$dbname -Ddatabase.password=$dbpwd -jar /app/tp-docker-1.0.0.jar 
